@@ -1,6 +1,6 @@
 streamlit
-tensorflow-gpu
-tflite_runtime
+tensorflow-gpu==2.15.0
+tflite-runtime==2.13.0
 opencv-python
 numpy
 matplotlib
