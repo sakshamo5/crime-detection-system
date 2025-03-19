@@ -23,10 +23,24 @@ def setup_gpu():
 @st.cache_resource
 def load_tflite_model():
     try:
-        # Use a relative path for the model file in the repository
+        # Use the correct filename as shown in your repository
         model_path = "crime_detection_model.tflite"
-        # Load the TFLite model and allocate tensors
-        interpreter = tf.lite.Interpreter(model_path=model_path)
+        
+        # Check if the file exists
+        if not os.path.exists(model_path):
+            st.error(f"Model file not found at: {model_path}")
+            # List directory contents to help debug
+            files = os.listdir(".")
+            st.sidebar.warning(f"Files in current directory: {files}")
+            return None
+            
+        # Load the TFLite model with additional options
+        # This can help with compatibility issues
+        interpreter = tf.lite.Interpreter(
+            model_path=model_path,
+            experimental_delegates=None,
+            num_threads=4
+        )
         interpreter.allocate_tensors()
         return interpreter
     except Exception as e:
