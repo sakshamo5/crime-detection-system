@@ -1,0 +1,6 @@
+streamlit
+tensorflow-gpu
+tflite_runtime
+opencv-python
+numpy
+matplotlib
