@@ -21,10 +21,12 @@ def setup_gpu():
 
 # Load TFLite model (cached)
 @st.cache_resource
-def load_tflite_model(tflite_model_path):
+def load_tflite_model():
     try:
+        # Use a relative path for the model file in the repository
+        model_path = "crime_detection_model.tflite"
         # Load the TFLite model and allocate tensors
-        interpreter = tf.lite.Interpreter(model_path=tflite_model_path)
+        interpreter = tf.lite.Interpreter(model_path=model_path)
         interpreter.allocate_tensors()
         return interpreter
     except Exception as e:
@@ -151,7 +153,7 @@ def visualize_prediction(frames, prediction, confidence):
 
 def main():
     st.set_page_config(
-        page_title="Crime Detection System (TFLite)",
+        page_title="Crime Detection System",
         page_icon="🎬",
         layout="wide"
     )
@@ -159,10 +161,13 @@ def main():
     st.title("Video Crime Detection System")
     st.write("Upload a video to detect if it contains violent content.")
     
-    # Sidebar for model selection
+    # Sidebar with app information
     with st.sidebar:
-        st.header("Model Settings")
-        model_path = st.text_input("TFLite Model Path", value="crime_detection_model.tflite")
+        st.header("About")
+        st.write("""
+        This application analyzes video content to detect potential violent scenes using a 
+        TensorFlow Lite model. Simply upload a video file to get started.
+        """)
         st.write("GPU Status:", "Available" if setup_gpu() else "Not Available")
     
     # Main content area
@@ -185,7 +190,7 @@ def main():
     if uploaded_file is not None and process_button:
         with st.spinner("Processing video..."):
             # Load TFLite model
-            interpreter = load_tflite_model(model_path)
+            interpreter = load_tflite_model()
             
             if interpreter:
                 # Run inference
@@ -212,7 +217,7 @@ def main():
                     else:
                         st.error("Failed to process the video.")
             else:
-                st.error(f"Failed to load model from {model_path}")
+                st.error("Failed to load model. Make sure 'crime_detection_model.tflite' is in the root directory.")
         
         # Clean up temporary file
         try:
