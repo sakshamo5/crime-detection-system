@@ -1,6 +1,6 @@
 streamlit
-tensorflow==2.12.0
-tflite-runtime==2.12.0
+tensorflow==2.18.0
+tflite-runtime==2.18.0
 opencv-python
 numpy
 matplotlib
